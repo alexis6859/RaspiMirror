@@ -1,26 +1,116 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Raspberry Mirror</title>
+    <title>RaspiMirror</title>
     <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
-    <div class="container">
-        <div class="card-current">
-            <div id="weather-data">
-                <h2 id="city-name"></h2>
-                <p id="temp"></p>
-                <p id="desc"></p>
-                <p id="humidity"></p>
-                <p id="feels-like"></p>
-            </div>
+    <div class="page-shell">
+        <div class="dashboard">
+            <header class="topbar">
+                <div class="clock-panel panel">
+                    <span class="eyebrow">Agora</span>
+                    <div id="clock" class="clock">--:--</div>
+                    <div id="date" class="date">--</div>
+                </div>
+
+                <div class="location-panel panel">
+                    <span class="eyebrow">Local</span>
+                    <div id="city-name" class="city-name">A localizar...</div>
+                </div>
+            </header>
+
+            <main class="content-grid">
+                <section class="weather-card panel">
+                    <div class="weather-main">
+                        <div class="weather-copy">
+                            <span class="section-kicker">Meteorologia</span>
+                            <h1 id="temp" class="temp-value">--°C</h1>
+                            <p id="desc" class="weather-desc">A carregar...</p>
+                        </div>
+
+                        <div id="weather-icon" class="weather-icon" aria-live="polite">☀️</div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <span>Humidade</span>
+                            <strong id="humidity">--%</strong>
+                        </div>
+                        <div class="stat-box">
+                            <span>Sensação</span>
+                            <strong id="feels-like">--°C</strong>
+                        </div>
+                        <div class="stat-box">
+                            <span>Vento</span>
+                            <strong id="wind">-- km/h</strong>
+                        </div>
+                    </div>
+                </section>
+
+                <aside class="assistant-card panel">
+                    <div class="assistant-header">
+                        <span class="ai-pill">AI</span>
+                        <h2>Assistente do clima</h2>
+                    </div>
+                    <div id="assistant-output" class="assistant-output">
+                        A preparar a meteorologia local...
+                    </div>
+                    <div class="assistant-input-row">
+                        <input id="assistant-input" type="text" placeholder="Pergunta ao assistente..." />
+                        <button id="assistant-btn" type="button">Enviar</button>
+                    </div>
+                </aside>
+            </main>
+
+            <section class="bottom-grid">
+                <div class="marine-card panel">
+                    <div class="section-title">Previsão do mar</div>
+                    <div class="marine-grid">
+                        <div class="marine-item">
+                            <span>Ondas</span>
+                            <strong id="sea-wave">-- m</strong>
+                        </div>
+                        <div class="marine-item">
+                            <span>Vento</span>
+                            <strong id="sea-wind">-- km/h</strong>
+                        </div>
+                        <div class="marine-item">
+                            <span>Estado</span>
+                            <strong id="sea-state">--</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="forecast-card panel">
+                    <div class="section-title">Próximos 3 dias</div>
+                    <div class="forecast-list">
+                        <div class="forecast-item">
+                            <span class="forecast-day"></span>
+                            <div class="forecast-icon" aria-hidden="true"></div>
+                            <strong class="forecast-temp"></strong>
+                        </div>
+                        <div class="forecast-item">
+                            <span class="forecast-day"></span>
+                            <div class="forecast-icon" aria-hidden="true"></div>
+                            <strong class="forecast-temp"></strong>
+                        </div>
+                        <div class="forecast-item">
+                            <span class="forecast-day"></span>
+                            <div class="forecast-icon" aria-hidden="true"></div>
+                            <strong class="forecast-temp"></strong>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
+
+    <script src="js/app.js"></script>
 </body>
-<script src="js/app.js"></script>
 
 </html>
