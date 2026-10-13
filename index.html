@@ -1,116 +1,125 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-PT">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
     <title>RaspiMirror</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..600&display=swap">
     <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
-    <div class="page-shell">
-        <div class="dashboard">
-            <header class="topbar">
-                <div class="clock-panel panel">
-                    <span class="eyebrow">Agora</span>
-                    <div id="clock" class="clock">--:--</div>
-                    <div id="date" class="date">--</div>
+    <div id="mirror" class="mirror">
+
+        <!-- ============ COLUNA ESQUERDA: tempo, o teu dia, agenda ============ -->
+        <section class="region region-left">
+            <div class="module clock-module" data-module="clock">
+                <div class="clock"><span id="clock-hm">--:--</span><span id="clock-s" class="clock-seconds">--</span></div>
+                <div id="date" class="date">—</div>
+                <div id="date-meta" class="meta"></div>
+                <div class="sky">
+                    <div id="sun" class="sky-item"></div>
+                    <div id="moon" class="sky-item"></div>
                 </div>
+            </div>
 
-                <div class="location-panel panel">
-                    <span class="eyebrow">Local</span>
-                    <div id="city-name" class="city-name">A localizar...</div>
-                </div>
-            </header>
+            <div class="module insights-module" data-module="insights" hidden>
+                <div class="module-title">O teu dia</div>
+                <div id="briefing" class="briefing" hidden></div>
+                <ul id="insights" class="insights"></ul>
+            </div>
 
-            <main class="content-grid">
-                <section class="weather-card panel">
-                    <div class="weather-main">
-                        <div class="weather-copy">
-                            <span class="section-kicker">Meteorologia</span>
-                            <h1 id="temp" class="temp-value">--°C</h1>
-                            <p id="desc" class="weather-desc">A carregar...</p>
-                        </div>
+            <div class="module calendar-module" data-module="calendar">
+                <div class="module-title">Agenda</div>
+                <div id="agenda" class="agenda"></div>
+                <div id="month-grid" class="month-grid" data-module="monthGrid"></div>
+                <div id="countdowns" class="countdowns"></div>
+            </div>
+        </section>
 
-                        <div id="weather-icon" class="weather-icon" aria-live="polite">☀️</div>
-                    </div>
+        <!-- ============ CENTRO: elogios, mensagens, assistente, temporizador ============ -->
+        <section class="region region-center">
+            <div id="stage" class="stage">
+                <div id="stage-timer" class="stage-timer" hidden></div>
+                <div id="stage-content" class="stage-content"></div>
+            </div>
+        </section>
 
-                    <div class="stats-grid">
-                        <div class="stat-box">
-                            <span>Humidade</span>
-                            <strong id="humidity">--%</strong>
-                        </div>
-                        <div class="stat-box">
-                            <span>Sensação</span>
-                            <strong id="feels-like">--°C</strong>
-                        </div>
-                        <div class="stat-box">
-                            <span>Vento</span>
-                            <strong id="wind">-- km/h</strong>
-                        </div>
-                    </div>
-                </section>
-
-                <aside class="assistant-card panel">
-                    <div class="assistant-header">
-                        <span class="ai-pill">AI</span>
-                        <h2>Assistente do clima</h2>
-                    </div>
-                    <div id="assistant-output" class="assistant-output">
-                        A preparar a meteorologia local...
-                    </div>
-                    <div class="assistant-input-row">
-                        <input id="assistant-input" type="text" placeholder="Pergunta ao assistente..." />
-                        <button id="assistant-btn" type="button">Enviar</button>
-                    </div>
-                </aside>
-            </main>
-
-            <section class="bottom-grid">
-                <div class="marine-card panel">
-                    <div class="section-title">Previsão do mar</div>
-                    <div class="marine-grid">
-                        <div class="marine-item">
-                            <span>Ondas</span>
-                            <strong id="sea-wave">-- m</strong>
-                        </div>
-                        <div class="marine-item">
-                            <span>Vento</span>
-                            <strong id="sea-wind">-- km/h</strong>
-                        </div>
-                        <div class="marine-item">
-                            <span>Estado</span>
-                            <strong id="sea-state">--</strong>
-                        </div>
+        <!-- ============ COLUNA DIREITA: meteorologia e mar ============ -->
+        <section class="region region-right">
+            <div class="module weather-module" data-module="weather">
+                <div class="weather-now">
+                    <div id="weather-icon" class="weather-icon"></div>
+                    <div class="weather-temp-block">
+                        <div id="weather-temp" class="weather-temp">--°</div>
+                        <div id="weather-range" class="weather-range"></div>
                     </div>
                 </div>
+                <div id="weather-desc" class="weather-desc">A carregar meteorologia…</div>
+                <div id="weather-location" class="meta"></div>
+                <div id="nowcast" class="nowcast"></div>
+                <div id="warnings" class="warnings"></div>
+                <div id="weather-details" class="details"></div>
+            </div>
 
-                <div class="forecast-card panel">
-                    <div class="section-title">Próximos 3 dias</div>
-                    <div class="forecast-list">
-                        <div class="forecast-item">
-                            <span class="forecast-day"></span>
-                            <div class="forecast-icon" aria-hidden="true"></div>
-                            <strong class="forecast-temp"></strong>
-                        </div>
-                        <div class="forecast-item">
-                            <span class="forecast-day"></span>
-                            <div class="forecast-icon" aria-hidden="true"></div>
-                            <strong class="forecast-temp"></strong>
-                        </div>
-                        <div class="forecast-item">
-                            <span class="forecast-day"></span>
-                            <div class="forecast-icon" aria-hidden="true"></div>
-                            <strong class="forecast-temp"></strong>
-                        </div>
-                    </div>
+            <div class="module hourly-module" data-module="hourly">
+                <div class="module-title">Próximas horas</div>
+                <div id="hourly" class="hourly"></div>
+            </div>
+
+            <div class="module forecast-module" data-module="forecast">
+                <div class="module-title">Próximos dias</div>
+                <div id="forecast" class="forecast"></div>
+            </div>
+
+            <div class="module marine-module" data-module="marine" hidden>
+                <div class="module-title"><span id="marine-title">Mar</span></div>
+                <div id="marine" class="marine"></div>
+            </div>
+        </section>
+
+        <!-- ============ FUNDO ============ -->
+        <section class="region region-bl">
+            <div class="module notes-module" data-module="notes">
+                <div class="module-title">Notas</div>
+                <ul id="notes" class="notes"></ul>
+                <div id="remote-hint" class="remote-hint" hidden></div>
+            </div>
+        </section>
+
+        <section class="region region-br">
+            <div class="module otd-module" data-module="onthisday" hidden>
+                <div class="module-title">Neste dia <span id="otd-year" class="otd-year"></span></div>
+                <p id="otd-text" class="otd-text"></p>
+            </div>
+        </section>
+
+        <section class="region region-news">
+            <div class="module news-module" data-module="news" hidden>
+                <div class="news-head">
+                    <span id="news-source" class="news-source"></span>
+                    <span id="news-time" class="news-time"></span>
                 </div>
-            </section>
-        </div>
+                <div id="news-title" class="news-title"></div>
+                <div class="news-progress"><span id="news-bar"></span></div>
+            </div>
+        </section>
+
+        <footer class="region region-status" data-module="system">
+            <span id="status-dot" class="status-dot"></span>
+            <span id="status-text"></span>
+        </footer>
     </div>
 
-    <script src="js/app.js"></script>
+    <div id="qr-overlay" class="qr-overlay" hidden></div>
+    <div id="offline" class="offline" hidden>Sem ligação ao servidor — a tentar novamente…</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js" defer></script>
+    <script type="module" src="js/app.js"></script>
 </body>
 
 </html>

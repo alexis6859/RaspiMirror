@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0b0b0f">
+    <meta name="color-scheme" content="dark">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Espelho · Comando</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300..600&display=swap">
+    <link rel="stylesheet" href="css/remote.css">
+</head>
+
+<body>
+    <header class="top">
+        <div>
+            <h1>Espelho</h1>
+            <p id="conn" class="conn">A ligar…</p>
+        </div>
+        <div id="clock" class="top-clock"></div>
+    </header>
+
+    <main>
+        <!-- ===================== INÍCIO ===================== -->
+        <section class="tab" data-tab="home">
+            <div class="card">
+                <h2>Ecrã</h2>
+                <div class="segmented" id="screen-mode">
+                    <button data-mode="auto">Auto</button>
+                    <button data-mode="day">Dia</button>
+                    <button data-mode="night">Noite</button>
+                    <button data-mode="off">Desligado</button>
+                </div>
+                <p class="hint">“Auto” escurece o espelho no horário noturno. “Desligado” deixa só o espelho.</p>
+            </div>
+
+            <div class="card">
+                <h2>Mensagem no espelho</h2>
+                <textarea id="msg-text" rows="2" maxlength="280" placeholder="Ex.: Não te esqueças de levar o lixo!"></textarea>
+                <div class="row">
+                    <input id="msg-from" type="text" maxlength="40" placeholder="De (opcional)">
+                    <select id="msg-minutes">
+                        <option value="10">10 min</option>
+                        <option value="30">30 min</option>
+                        <option value="60" selected>1 hora</option>
+                        <option value="240">4 horas</option>
+                        <option value="720">12 horas</option>
+                        <option value="1440">1 dia</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <button id="msg-send" class="primary">Enviar</button>
+                    <button id="msg-clear" class="ghost">Limpar</button>
+                </div>
+                <p id="msg-current" class="hint"></p>
+            </div>
+
+            <div class="card">
+                <h2>Temporizador</h2>
+                <div id="timer-live" class="timer-live" hidden></div>
+                <div class="chips" id="timer-presets">
+                    <button data-s="120" data-l="Escovar os dentes">2 min · dentes</button>
+                    <button data-s="300">5 min</button>
+                    <button data-s="600">10 min</button>
+                    <button data-s="900">15 min</button>
+                    <button data-s="1800">30 min</button>
+                    <button data-s="3600">1 hora</button>
+                </div>
+                <div class="row">
+                    <input id="timer-min" type="number" min="1" max="1440" inputmode="numeric" placeholder="Minutos">
+                    <input id="timer-label" type="text" maxlength="40" placeholder="Nome (ex.: Massa)">
+                    <button id="timer-start" class="primary">Iniciar</button>
+                </div>
+                <button id="timer-cancel" class="ghost full" hidden>Cancelar temporizador</button>
+            </div>
+
+            <div class="card">
+                <h2>Ações</h2>
+                <div class="grid-actions">
+                    <button data-cmd="refresh">Atualizar dados</button>
+                    <button data-cmd="reload">Recarregar espelho</button>
+                    <button data-cmd="nextNews">Próxima notícia</button>
+                    <button data-cmd="qr">Mostrar QR</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== NOTAS ===================== -->
+        <section class="tab" data-tab="notes" hidden>
+            <div class="card">
+                <h2>Notas e tarefas</h2>
+                <form id="note-form" class="row">
+                    <input id="note-text" type="text" maxlength="200" placeholder="Nova tarefa…" autocomplete="off">
+                    <button class="primary" type="submit">Adicionar</button>
+                </form>
+                <label class="check"><input type="checkbox" id="note-kind"> Nota (sem caixa de visto)</label>
+                <ul id="note-list" class="note-list"></ul>
+                <button id="note-clear" class="ghost full">Apagar tarefas concluídas</button>
+            </div>
+        </section>
+
+        <!-- ===================== ASSISTENTE ===================== -->
+        <section class="tab" data-tab="ask" hidden>
+            <div class="card">
+                <h2>Assistente (IA local)</h2>
+                <p class="hint" id="ai-status">A verificar o Ollama…</p>
+                <form id="ask-form">
+                    <textarea id="ask-text" rows="3" maxlength="400" placeholder="Pergunta qualquer coisa…"></textarea>
+                    <label class="check"><input type="checkbox" id="ask-show" checked> Mostrar resposta no espelho</label>
+                    <button class="primary full" type="submit" id="ask-btn">Perguntar</button>
+                </form>
+                <div class="chips" id="ask-suggestions">
+                    <button>Que roupa visto hoje?</button>
+                    <button>Vai chover esta semana?</button>
+                    <button>Como está o mar para surfar?</button>
+                    <button>O que tenho na agenda?</button>
+                    <button>Sugere um jantar rápido.</button>
+                </div>
+                <div id="ask-answer" class="answer" hidden></div>
+            </div>
+        </section>
+
+        <!-- ===================== DEFINIÇÕES ===================== -->
+        <section class="tab" data-tab="settings" hidden>
+            <form id="settings">
+                <div class="card">
+                    <h2>Localização</h2>
+                    <div class="row">
+                        <input id="geo-search" type="search" placeholder="Procurar cidade (ex.: Matosinhos)">
+                        <button type="button" id="geo-btn">Procurar</button>
+                    </div>
+                    <ul id="geo-results" class="geo-results"></ul>
+                    <label>Nome<input name="location.name" type="text"></label>
+                    <div class="row">
+                        <label>Latitude<input name="location.lat" type="number" step="any"></label>
+                        <label>Longitude<input name="location.lon" type="number" step="any"></label>
+                    </div>
+                    <label>Avisos IPMA — distrito
+                        <select name="ipmaArea">
+                            <option value="AVR">Aveiro</option><option value="BJA">Beja</option><option value="BRG">Braga</option>
+                            <option value="BGC">Bragança</option><option value="CBO">Castelo Branco</option><option value="CBR">Coimbra</option>
+                            <option value="EVR">Évora</option><option value="FAR">Faro</option><option value="GDA">Guarda</option>
+                            <option value="LRA">Leiria</option><option value="LSB">Lisboa</option><option value="PTG">Portalegre</option>
+                            <option value="PTO">Porto</option><option value="STM">Santarém</option><option value="STB">Setúbal</option>
+                            <option value="VCT">Viana do Castelo</option><option value="VRL">Vila Real</option><option value="VIS">Viseu</option>
+                            <option value="MCN">Madeira — Costa Norte</option><option value="MCS">Madeira — Costa Sul</option>
+                            <option value="MRM">Madeira — Regiões Montanhosas</option><option value="MPS">Porto Santo</option>
+                            <option value="AOC">Açores — Grupo Ocidental</option><option value="ACE">Açores — Grupo Central</option>
+                            <option value="AOR">Açores — Grupo Oriental</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="card">
+                    <h2>Mar e marés</h2>
+                    <label class="check"><input type="checkbox" name="marine.enabled"> Mostrar previsão do mar</label>
+                    <label>Nome da praia<input name="marine.name" type="text"></label>
+                    <div class="row">
+                        <label>Latitude<input name="marine.lat" type="number" step="any"></label>
+                        <label>Longitude<input name="marine.lon" type="number" step="any"></label>
+                    </div>
+                    <button type="button" class="ghost" id="marine-same">Usar a localização acima</button>
+                </div>
+
+                <div class="card">
+                    <h2>Calendários</h2>
+                    <p class="hint">Google Calendar: Definições → o teu calendário → “Endereço secreto no formato iCal”. Também funciona com Outlook, iCloud, Proton, etc.</p>
+                    <div id="calendars" class="list-editor"></div>
+                    <button type="button" class="ghost" id="add-calendar">+ Adicionar calendário</button>
+                    <label>Dias a mostrar<input name="calendarDays" type="number" min="1" max="120"></label>
+                </div>
+
+                <div class="card">
+                    <h2>Datas especiais</h2>
+                    <p class="hint">Aniversários e contagens decrescentes. Data anual: <code>MM-DD</code>; data única: <code>AAAA-MM-DD</code>.</p>
+                    <div id="dates" class="list-editor"></div>
+                    <button type="button" class="ghost" id="add-date">+ Adicionar data</button>
+                </div>
+
+                <div class="card">
+                    <h2>Notícias</h2>
+                    <div id="feeds" class="list-editor"></div>
+                    <button type="button" class="ghost" id="add-feed">+ Adicionar feed RSS</button>
+                    <label>Segundos por notícia<input name="news.rotateSeconds" type="number" min="4" max="120"></label>
+                </div>
+
+                <div class="card">
+                    <h2>Modo noturno</h2>
+                    <label class="check"><input type="checkbox" name="night.auto"> Escurecer automaticamente</label>
+                    <div class="row">
+                        <label>Início<input name="night.start" type="time"></label>
+                        <label>Fim<input name="night.end" type="time"></label>
+                    </div>
+                    <label>Brilho à noite <output id="dim-out"></output><input name="night.dim" type="range" min="0.1" max="0.8" step="0.05"></label>
+                </div>
+
+                <div class="card">
+                    <h2>Módulos</h2>
+                    <div class="toggles" id="module-toggles"></div>
+                </div>
+
+                <div class="card">
+                    <h2>Ecrã</h2>
+                    <label class="check"><input type="checkbox" name="display.seconds"> Mostrar segundos</label>
+                    <label class="check"><input type="checkbox" name="display.burnInShift"> Proteção contra marcas no ecrã (move ligeiramente o conteúdo)</label>
+                    <label class="check"><input type="checkbox" name="display.remoteHint"> Mostrar QR do comando quando não há notas</label>
+                </div>
+
+                <div class="card">
+                    <h2>Assistente</h2>
+                    <label>Modelo Ollama<select name="assistant.model" id="model-select"></select></label>
+                    <label class="check"><input type="checkbox" name="assistant.briefing"> Resumo do dia gerado por IA</label>
+                </div>
+
+                <div class="card">
+                    <h2>Frases personalizadas</h2>
+                    <p class="hint">Uma por linha. Aparecem no centro do espelho, misturadas com as automáticas.</p>
+                    <textarea name="compliments" rows="4" placeholder="Hoje vai ser um grande dia!"></textarea>
+                </div>
+
+                <div class="save-bar">
+                    <button type="button" class="ghost" id="reset-config">Repor padrão</button>
+                    <button type="submit" class="primary">Guardar</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <nav class="tabs">
+        <button data-tab="home" class="active"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Início</button>
+        <button data-tab="notes"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Notas</button>
+        <button data-tab="ask"><svg viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>Assistente</button>
+        <button data-tab="settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Definições</button>
+    </nav>
+
+    <div id="toast" class="toast" hidden></div>
+
+    <dialog id="pin-dialog">
+        <form method="dialog">
+            <h2>PIN do espelho</h2>
+            <input id="pin-input" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN">
+            <button class="primary full">Entrar</button>
+        </form>
+    </dialog>
+
+    <script type="module" src="js/remote.js"></script>
+</body>
+
+</html>

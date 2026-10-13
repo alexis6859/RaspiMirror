@@ -1,0 +1,59 @@
+{
+    "location": {
+        "name": "Leça da Palmeira",
+        "lat": 41.1862,
+        "lon": -8.6965
+    },
+    "marine": {
+        "enabled": true,
+        "name": "Praia de Leça",
+        "lat": 41.1862,
+        "lon": -8.6965
+    },
+    "ipmaArea": "PTO",
+    "calendars": [],
+    "calendarDays": 30,
+    "dates": [
+        { "title": "Natal", "date": "12-25", "kind": "countdown" },
+        { "title": "Passagem de ano", "date": "12-31", "kind": "countdown" }
+    ],
+    "news": {
+        "rotateSeconds": 12,
+        "feeds": [
+            { "name": "RTP", "url": "https://www.rtp.pt/noticias/rss" },
+            { "name": "Observador", "url": "https://observador.pt/feed/" },
+            { "name": "Público", "url": "https://feeds.feedburner.com/PublicoRSS" }
+        ]
+    },
+    "night": {
+        "mode": "auto",
+        "start": "23:30",
+        "end": "07:00",
+        "dim": 0.35
+    },
+    "modules": {
+        "weather": true,
+        "hourly": true,
+        "forecast": true,
+        "air": true,
+        "marine": true,
+        "insights": true,
+        "calendar": true,
+        "monthGrid": true,
+        "news": true,
+        "onthisday": true,
+        "notes": true,
+        "compliments": true,
+        "system": true
+    },
+    "display": {
+        "seconds": true,
+        "burnInShift": true,
+        "remoteHint": true
+    },
+    "assistant": {
+        "model": "llama3.2",
+        "briefing": true
+    },
+    "compliments": []
+}

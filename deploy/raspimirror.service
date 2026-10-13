@@ -1,0 +1,20 @@
+# Serviço systemd do backend do RaspiMirror.
+# Instalar:  sudo cp deploy/raspimirror.service /etc/systemd/system/
+#            (ajusta User e WorkingDirectory se necessário)
+#            sudo systemctl daemon-reload && sudo systemctl enable --now raspimirror
+[Unit]
+Description=RaspiMirror backend
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/var/www/html/raspimirror/raspimirror-backend
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=5
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
